@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">BinauralBeatsApp</string>
+    <string name="app_name">Binaural Beats App</string>
+
+    <string name="button_sleep">Sleep (theta)</string>
+    <string name="button_focus">Focus (gamma)</string>
+    <string name="button_creativity">Creativity (delta)</string>
+
 </resources>
