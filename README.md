@@ -1,1 +1,0 @@
-# binaural-beats-app
