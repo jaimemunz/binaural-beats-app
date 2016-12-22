@@ -4,7 +4,6 @@
     <string name="button_sleep">Sleep (theta)</string>
     <string name="button_focus">Focus (gamma)</string>
     <string name="button_creativity">Creativity (delta)</string>
-    <string name="pause">Pause</string>
     <string name="stop">Stop</string>
 
 </resources>
