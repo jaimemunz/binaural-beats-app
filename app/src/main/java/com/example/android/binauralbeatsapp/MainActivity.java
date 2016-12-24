@@ -27,8 +27,7 @@ public class MainActivity extends Activity {
         audioTrack =  new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
                 SAMPLE_RATE * TONE_DURATION * 4, AudioTrack.MODE_STATIC);
-        setupVolumeControl();
-    }
+        setupVolumeControl();    }
 
     // Links volume bar to audio track
     private void setupVolumeControl() {
