@@ -1,14 +1,16 @@
 package com.example.android.binauralbeatsapp;
 
+import android.app.Activity;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.SeekBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private final static int SAMPLE_RATE = 8000; // in Hz
     private final static int TONE_DURATION = 1; // in seconds
@@ -16,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private AudioTrack audioTrack;
 
     /** Initialize the AudioTrack object and volume control
-     * @param savedInstanceState
+     * @param savedInstanceState savedInstance which is passed to super.onCreate
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
         // assumes the sample buffer is normalized.
         for (int idx = 0, i = 0; i < numSamples; ++i) {
             // Max amplitude for the samples
-            final short valL = (short) (sampleR[i] * Short.MAX_VALUE);
-            final short valR = (short) (sampleL[i] * Short.MAX_VALUE);
+            final short valR = (short) (sampleR[i] * Short.MAX_VALUE);
+            final short valL = (short) (sampleL[i] * Short.MAX_VALUE);
             // in 16 bit wav PCM, first byte is the low order byte
             generatedStereoSamples[idx++] = (byte) (valL & 0x00ff);
             generatedStereoSamples[idx++] = (byte) ((valL & 0xff00) >>> 8);
