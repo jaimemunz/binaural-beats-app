@@ -13,29 +13,7 @@ import android.widget.EditText;
 
 public class SleepTimerDialog extends Activity {
 
-    CharSequence times[] = new CharSequence[] {"Sleep in 10 minutes", "Sleep in 15 minutes",
-            "Sleep in 30 minutes", "Other..."};
-    private int minutesToSleep = 0;
 
-    public void getSleepTime(View view) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose when to sleep");
-        builder.setItems(times, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    minutesToSleep = 10;
-                } else if (which == 1) {
-                    minutesToSleep = 15;
-                } else if (which == 2) {
-                    minutesToSleep = 30;
-                }
-            }
-
-        });
-        builder.show();
-
-    }
 
 }

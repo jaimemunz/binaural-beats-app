@@ -1,19 +1,31 @@
 package com.example.android.binauralbeatsapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SeekBar;
+
+import static android.R.id.input;
 
 public class MainActivity extends Activity {
 
     private final static int SAMPLE_RATE = 8000; // in Hz
     private final static int TONE_DURATION = 1; // in seconds
+
+    CharSequence times[] = new CharSequence[] {"In 5 minutes", "In 10 minutes", "In 15 minutes",
+            "In 30 minutes"};
+    private int minutesToSleep = 0;
 
     private AudioTrack audioTrack;
 
@@ -58,8 +70,74 @@ public class MainActivity extends Activity {
 
     // Stops the audio and clears the buffer
     public void stop(View view) {
-        audioTrack.pause();
-        audioTrack.flush();
+        try {
+            audioTrack.pause();
+            audioTrack.flush();
+        } catch (IllegalStateException e) {
+            Log.i("", "AudioTrack not initialized");
+        }
+    }
+
+    public void setSleepTime(View view) {
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setHint("Custom amount of minutes");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose when to sleep");
+        builder.setItems(times, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    minutesToSleep = 10;
+                } else if (which == 1) {
+                    minutesToSleep = 15;
+                } else if (which == 2) {
+                    minutesToSleep = 30;
+                }
+
+                if (minutesToSleep > 0) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            audioTrack.pause();
+                            audioTrack.flush();
+                        }
+                    }, minutesToSleep * 60000);
+                }
+            }
+        });
+        builder.setView(input);
+        builder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String m_Text = input.getText().toString();
+                try {
+                    minutesToSleep = Integer.parseInt(m_Text);
+                    Log.i("", minutesToSleep+" is a number");
+                } catch (NumberFormatException e) {
+                    Log.i("", m_Text+" is not a number");
+                }
+
+
+                if (minutesToSleep > 0) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            audioTrack.pause();
+                            audioTrack.flush();
+                        }
+                    }, minutesToSleep * 60000);
+                }
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     /**
