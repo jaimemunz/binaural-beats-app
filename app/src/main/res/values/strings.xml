@@ -6,5 +6,6 @@
     <string name="button_creativity">Creativity (delta)</string>
     <string name="stop">Stop</string>
     <string name="sleep_timer">Sleep Timer</string>
+    <string name="title_activity_nature_sounds">NatureSounds</string>
 
 </resources>

@@ -39,7 +39,8 @@ public class MainActivity extends Activity {
         audioTrack =  new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT,
                 SAMPLE_RATE * TONE_DURATION * 4, AudioTrack.MODE_STATIC);
-        setupVolumeControl();    }
+        setupVolumeControl();  
+    }
 
     // Links volume bar to audio track
     private void setupVolumeControl() {
@@ -65,7 +66,8 @@ public class MainActivity extends Activity {
         playTones(400,410);
     }
     public void playDelta(View view) {
-        playTones(600,601);
+        //playTones(600,601);
+        playIsochronicBeats(500, 10);
     }
 
     // Stops the audio and clears the buffer
@@ -156,6 +158,7 @@ public class MainActivity extends Activity {
         }
         // Converts to 16 bit pcm sound array
         // assumes the sample buffer is normalized.
+        // TODO: Ramp up amplitude to reduce clicks
         for (int idx = 0, i = 0; i < numSamples; ++i) {
             // Max amplitude for the samples
             final short valR = (short) (sampleR[i] * Short.MAX_VALUE);
@@ -171,5 +174,37 @@ public class MainActivity extends Activity {
         audioTrack.reloadStaticData(); // Added to use Static Mode, needed for looping
         audioTrack.setLoopPoints(0,audioTrack.getBufferSizeInFrames(),-1); // Infinite loop of the sample
         audioTrack.play();
+    }
+
+    private void playIsochronicBeats(double carrierFrequency, double beatFrequency) {
+        int numSamples = TONE_DURATION * SAMPLE_RATE;
+        double sampleL[] = new double[numSamples];
+        double sampleR[] = new double[numSamples];
+        byte generatedStereoSamples[] = new byte[4 * numSamples];
+        for (int i = 0; i < numSamples; ++i) {      // Fill the sample array
+            double amplitude = Math.sin(beatFrequency * 2 * Math.PI * i / SAMPLE_RATE);
+            double sample = Math.sin(carrierFrequency * 2 * Math.PI * i / (SAMPLE_RATE)) * amplitude;
+            sample = amplitude > 0 ? sample : 0;
+            sampleR[i] = sample;
+            sampleL[i] = sample;
+        }
+        // Converts to 16 bit pcm sound array
+        // assumes the sample buffer is normalized.
+        for (int idx = 0, i = 0; i < numSamples; ++i) {
+            // Max amplitude for the samples
+            final short valR = (short) (sampleR[i] * Short.MAX_VALUE);
+            final short valL = (short) (sampleL[i] * Short.MAX_VALUE);
+            // in 16 bit wav PCM, first byte is the low order byte
+            generatedStereoSamples[idx++] = (byte) (valL & 0x00ff);
+            generatedStereoSamples[idx++] = (byte) ((valL & 0xff00) >>> 8);
+            generatedStereoSamples[idx++] = (byte) (valR & 0x00ff);
+            generatedStereoSamples[idx++] = (byte) ((valR & 0xff00) >>> 8);
+        }
+        audioTrack.flush(); // Clear AudioTrack
+        audioTrack.write(generatedStereoSamples, 0, generatedStereoSamples.length); // Send samples
+        audioTrack.reloadStaticData(); // Added to use Static Mode, needed for looping
+        audioTrack.setLoopPoints(0,audioTrack.getBufferSizeInFrames(),-1); // Infinite loop of the sample
+        audioTrack.play();
+
     }
 }
