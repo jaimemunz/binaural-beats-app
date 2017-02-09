@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/background"
+    android:background="@mipmap/background"
 
     tools:context="com.example.android.binauralbeatsapp.LaunchActivity">
 
@@ -25,7 +25,7 @@
             android:layout_gravity="fill_vertical|fill_horizontal"
             android:weightSum="1">
 
-            <ImageView
+            <!--<ImageView
                 app:srcCompat="@drawable/st"
                 android:id="@+id/imageView"
                 android:cropToPadding="true"
@@ -42,14 +42,14 @@
                 android:id="@+id/imageView2"
                 android:layout_weight="0.06"
                 android:elevation="23dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp" /> -->
         </LinearLayout>
 
         <Button
             android:text="Start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
+            android:id="@+id/start_button"
             android:background="@drawable/button"
             android:layout_marginTop="30dp" />
     </LinearLayout>

@@ -7,5 +7,7 @@
     <string name="stop">Stop</string>
     <string name="sleep_timer">Sleep Timer</string>
     <string name="title_activity_nature_sounds">NatureSounds</string>
+    <string name="rainforest_button">Rainforest</string>
+    <string name="thunderstorm_button">Thunderstorm</string>
 
 </resources>
